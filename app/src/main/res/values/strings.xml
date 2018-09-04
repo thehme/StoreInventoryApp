@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Store Inventory</string>
+    <string name="app_name">Books Inventory</string>
     <string name="insert_dummy_data">Insert Dummy Data</string>
 </resources>
