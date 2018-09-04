@@ -9,15 +9,26 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     public final static int DATABASE_VERSION = 1;
     public final static String DATABASE_NAME = "inventory.db";
 
-    private final static String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + InventoryEntry.TABLE_NAME + " (" +
-            InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            InventoryEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " +
-            InventoryEntry.COLUMN_PRODUCT_PRICE + " INTEGER NOT NULL, " +
-            InventoryEntry.COLUMN_PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0, " +
-            InventoryEntry.COLUMN_PRODUCT_SUPPLIER + " TEXT, " +
-            InventoryEntry.COLUMN_SUPPLIER_PHONE + " TEXT, " +
-            InventoryEntry.COLUMN_PRODUCT_DESCRIPTION + " TEXT );";
+//    private final static String SQL_CREATE_ENTRIES =
+//            "CREATE TABLE " + InventoryEntry.TABLE_NAME + " (" +
+//            InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//            InventoryEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " +
+//            InventoryEntry.COLUMN_PRODUCT_PRICE + " INTEGER NOT NULL, " +
+//            InventoryEntry.COLUMN_PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0, " +
+//            InventoryEntry.COLUMN_PRODUCT_SUPPLIER + " TEXT, " +
+//            InventoryEntry.COLUMN_SUPPLIER_PHONE + " TEXT, " +
+//            InventoryEntry.COLUMN_PRODUCT_ISBN + " TEXT );";
+
+    private final static String SQL_CREATE_ENTRIES = String.format(
+            "CREATE TABLE %s (%s, %s, %s, %s, %s ,%s);",
+            InventoryEntry.TABLE_NAME,
+            InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT",
+            InventoryEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL",
+            InventoryEntry.COLUMN_PRODUCT_PRICE + " INTEGER NOT NULL",
+            InventoryEntry.COLUMN_PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0",
+            InventoryEntry.COLUMN_PRODUCT_SUPPLIER + " TEXT",
+            InventoryEntry.COLUMN_SUPPLIER_PHONE + " TEXT"
+    );
 
     private final static String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + InventoryEntry.TABLE_NAME;
