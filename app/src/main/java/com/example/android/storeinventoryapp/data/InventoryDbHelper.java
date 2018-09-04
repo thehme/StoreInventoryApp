@@ -13,7 +13,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + InventoryEntry.TABLE_NAME + " (" +
             InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             InventoryEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " +
-            InventoryEntry.COLUMN_PRODUCT_PRICE + " FLOAT NOT NULL, " +
+            InventoryEntry.COLUMN_PRODUCT_PRICE + " INTEGER NOT NULL, " +
             InventoryEntry.COLUMN_PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0, " +
             InventoryEntry.COLUMN_PRODUCT_SUPPLIER + " TEXT, " +
             InventoryEntry.COLUMN_SUPPLIER_PHONE + " TEXT, " +

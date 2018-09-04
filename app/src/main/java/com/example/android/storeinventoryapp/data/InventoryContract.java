@@ -17,7 +17,7 @@ public final class InventoryContract {
         public final static String COLUMN_SUPPLIER_PHONE = "phone number";
         public final static String COLUMN_PRODUCT_DESCRIPTION = "description";
 
-        public final static double PRODUCT_PRICE = 0;
+        public final static int PRODUCT_PRICE_CENTS = 0;
         public final static int PRODUCT_QUANTITY = 0;
     }
 }
