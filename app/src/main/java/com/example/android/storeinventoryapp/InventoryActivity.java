@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.android.storeinventoryapp.data.InventoryDbHelper;
 
+import org.json.JSONObject;
+
 public class InventoryActivity extends AppCompatActivity {
     private final static String TAG = InventoryActivity.class.getSimpleName();
     private SQLiteDatabase db;
@@ -36,19 +38,24 @@ public class InventoryActivity extends AppCompatActivity {
 
         try {
             ContentValues values = new ContentValues();
-            values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Qué cosas dice mi abuela!");
-            values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, 399);
-            values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, 1);
-            values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER, "Scholastic");
+            values.put(InventoryEntry.COLUMN_BOOK_NAME, "Qué cosas dice mi abuela!");
+            values.put(InventoryEntry.COLUMN_BOOK_PRICE_CENTS, 399);
+            values.put(InventoryEntry.COLUMN_BOOK_QUANTITY, 1);
+            values.put(InventoryEntry.COLUMN_BOOK_SUPPLIER, "Scholastic");
             values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, "1-800-770-4662");
-//            values.put(InventoryEntry.COLUMN_PRODUCT_ISBN, "9780545328630");
+            values.put(InventoryEntry.COLUMN_BOOK_ISBN, "9780545328630");
+            values.put(InventoryEntry.COLUMN_BOOK_CONDITION, InventoryEntry.BOOK_CONDITION_NEW);
 
-//            InventoryEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " +
-//            InventoryEntry.COLUMN_PRODUCT_PRICE + " INTEGER NOT NULL, " +
-//            InventoryEntry.COLUMN_PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0, " +
-//            InventoryEntry.COLUMN_PRODUCT_SUPPLIER + " TEXT, " +
+            Log.i(TAG, "values: " + values.toString());
+
+//            values.put(InventoryEntry.COLUMN_BOOK_ISBN, "9780545328630");
+
+//            InventoryEntry.COLUMN_BOOK_NAME + " TEXT NOT NULL, " +
+//            InventoryEntry.COLUMN_BOOK_PRICE + " INTEGER NOT NULL, " +
+//            InventoryEntry.COLUMN_BOOK_QUANTITY + " INTEGER NOT NULL DEFAULT 0, " +
+//            InventoryEntry.COLUMN_BOOK_SUPPLIER + " TEXT, " +
 //            InventoryEntry.COLUMN_SUPPLIER_PHONE + " TEXT, " +
-//            InventoryEntry.COLUMN_PRODUCT_ISBN + " TEXT );";
+//            InventoryEntry.COLUMN_BOOK_ISBN + " TEXT );";
 
             long newRowId = db.insert(InventoryEntry.TABLE_NAME, null, values);
             if (newRowId != -1) {
