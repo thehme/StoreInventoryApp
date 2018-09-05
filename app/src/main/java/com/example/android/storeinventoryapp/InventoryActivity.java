@@ -1,15 +1,21 @@
 package com.example.android.storeinventoryapp;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.android.storeinventoryapp.data.InventoryDbHelper;
+
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
 
 public class InventoryActivity extends AppCompatActivity {
     private final static String TAG = InventoryActivity.class.getSimpleName();
@@ -22,6 +28,7 @@ public class InventoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inventory);
 
         mDbHelper = new InventoryDbHelper(this);
+        displayDatabaseEntries();
     }
 
     @Override
@@ -48,7 +55,7 @@ public class InventoryActivity extends AppCompatActivity {
 
             long newRowId = db.insert(InventoryEntry.TABLE_NAME, null, values);
             if (newRowId != -1) {
-//                displayDatabaseInfo();
+                displayDatabaseEntries();
                 Log.i(TAG, "newRowId: " + newRowId);
             } else {
                 Log.i(TAG, "Error inserting dummy data");
@@ -56,6 +63,72 @@ public class InventoryActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.e(TAG, "Error inserting data into db: " + e);
+        }
+    }
+
+    private void displayDatabaseEntries() {
+        mDbHelper = new InventoryDbHelper(this);
+
+        // need db in readable mode
+        db = mDbHelper.getReadableDatabase();
+
+        // create projection array with all columns needed from db
+        String[] projection = {
+                InventoryEntry._ID,
+                InventoryEntry.COLUMN_BOOK_NAME,
+                InventoryEntry.COLUMN_BOOK_PRICE_CENTS,
+                InventoryEntry.COLUMN_BOOK_QUANTITY,
+                InventoryEntry.COLUMN_BOOK_SUPPLIER,
+                InventoryEntry.COLUMN_SUPPLIER_PHONE,
+                InventoryEntry.COLUMN_BOOK_ISBN,
+                InventoryEntry.COLUMN_BOOK_CONDITION
+        };
+
+        // create a cursor of the db with query string retrieving the above projection
+        Cursor cursor = db.query(InventoryEntry.TABLE_NAME, projection, null, null, null, null, null);
+
+        try {
+            // find TextView with id inventory_text_view to temporarily display data
+            TextView inventoryTextView = (TextView) findViewById(R.id.inventory_text_view);
+            // use getCount cursor method to display today number of rows in db
+            inventoryTextView.setText("Number of rows in books database table: " + cursor.getCount() + "\n\n");
+            // append row with table column names, omitting supplier info for this exercise
+            inventoryTextView.append(InventoryEntry._ID + "\t | " +
+            InventoryEntry.COLUMN_BOOK_NAME + " | " +
+            InventoryEntry.COLUMN_BOOK_PRICE + " | " +
+            InventoryEntry.COLUMN_BOOK_QUANTITY + " | " +
+            InventoryEntry.COLUMN_BOOK_ISBN + " | " +
+            InventoryEntry.COLUMN_BOOK_CONDITION + "\n");
+
+            // get column indices
+            int idColumnIndex = cursor.getColumnIndex(InventoryEntry._ID);
+            int bookNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_NAME);
+            int bookPriceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_PRICE_CENTS);
+            int bookQuantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_QUANTITY);
+            int bookIsbnColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_ISBN);
+            int bookConditionColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_CONDITION);
+
+            // traverse cursor and display each book's info
+            while (cursor.moveToNext()) {
+                int currentId = cursor.getInt(idColumnIndex);
+                String currentBookName = cursor.getString(bookNameColumnIndex);
+                int currentPriceCents = cursor.getInt(bookPriceColumnIndex);
+                DecimalFormat formatter = new DecimalFormat("##.00");
+                double currentBookPrice = currentPriceCents / 100;
+                String currentPrice = formatter.format(currentBookPrice);
+                String currentQuantity = Integer.toString(cursor.getInt(bookQuantityColumnIndex));
+                String currentIsnb = Integer.toString(cursor.getInt(bookIsbnColumnIndex));
+                String currentCondition = cursor.getString(bookConditionColumnIndex);
+                inventoryTextView.append("\n" + currentId + " | "
+                        + currentBookName + " | "
+                        + currentPrice + " | "
+                        + currentQuantity + " | "
+                        + currentIsnb + " | "
+                        + currentCondition);
+            }
+        } finally {
+            // always dispose of cursor
+            cursor.close();
         }
     }
 
