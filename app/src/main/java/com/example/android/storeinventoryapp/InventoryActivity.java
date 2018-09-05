@@ -12,9 +12,6 @@ import android.widget.TextView;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.android.storeinventoryapp.data.InventoryDbHelper;
-
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
 
 public class InventoryActivity extends AppCompatActivity {
@@ -114,7 +111,7 @@ public class InventoryActivity extends AppCompatActivity {
                 String currentBookName = cursor.getString(bookNameColumnIndex);
                 int currentPriceCents = cursor.getInt(bookPriceColumnIndex);
                 DecimalFormat formatter = new DecimalFormat("##.00");
-                double currentBookPrice = currentPriceCents / 100;
+                double currentBookPrice = currentPriceCents / 100.0;
                 String currentPrice = formatter.format(currentBookPrice);
                 String currentQuantity = Integer.toString(cursor.getInt(bookQuantityColumnIndex));
                 String currentIsnb = Integer.toString(cursor.getInt(bookIsbnColumnIndex));
