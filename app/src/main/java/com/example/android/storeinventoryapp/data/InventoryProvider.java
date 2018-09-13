@@ -11,6 +11,9 @@ public class InventoryProvider extends ContentProvider {
     public static final String TAG = InventoryProvider.class.getSimpleName();
     private InventoryDbHelper inventoryDbHelper;
 
+    // define cursor to hold result from query operation
+    private Cursor cursor;
+
     @Override
     public boolean onCreate() {
         return false;
