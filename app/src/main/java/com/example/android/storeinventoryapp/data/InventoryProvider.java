@@ -2,6 +2,7 @@ package com.example.android.storeinventoryapp.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -17,6 +18,9 @@ public class InventoryProvider extends ContentProvider {
     // uri codes
     private static final int BOOKS = 100;
     private static final int BOOK_ID = 101;
+
+    // define uri matcher
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     @Override
     public boolean onCreate() {
