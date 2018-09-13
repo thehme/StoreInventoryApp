@@ -8,6 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 public class InventoryProvider extends ContentProvider {
+    public static final String TAG = InventoryProvider.class.getSimpleName();
+    private InventoryDbHelper inventoryDbHelper;
+
     @Override
     public boolean onCreate() {
         return false;
