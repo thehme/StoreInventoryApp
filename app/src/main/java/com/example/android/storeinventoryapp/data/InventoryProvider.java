@@ -14,6 +14,10 @@ public class InventoryProvider extends ContentProvider {
     // define cursor to hold result from query operation
     private Cursor cursor;
 
+    // uri codes
+    private static final int BOOKS = 100;
+    private static final int BOOK_ID = 101;
+
     @Override
     public boolean onCreate() {
         return false;
