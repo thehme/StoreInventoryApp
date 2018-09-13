@@ -19,6 +19,7 @@ public final class InventoryContract {
 
     public final static class InventoryEntry implements BaseColumns {
         public final static String TABLE_NAME = "books";
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_INVENTORY);
 
         public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_BOOK_NAME = "title";
