@@ -22,6 +22,11 @@ public class InventoryProvider extends ContentProvider {
     // define uri matcher
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+    static {
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY, BOOKS);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY + "/#", BOOK_ID);
+    }
+
     /**
      * To initialize the content provider and db helper object
      * @return true
