@@ -22,9 +22,14 @@ public class InventoryProvider extends ContentProvider {
     // define uri matcher
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+    /**
+     * To initialize the content provider and db helper object
+     * @return true
+     */
     @Override
     public boolean onCreate() {
-        return false;
+        inventoryDbHelper = new InventoryDbHelper(getContext());
+        return true;
     }
 
     @Nullable
