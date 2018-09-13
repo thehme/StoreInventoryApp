@@ -3,6 +3,8 @@ package com.example.android.storeinventoryapp.data;
 import android.provider.BaseColumns;
 
 public final class InventoryContract {
+    public static final String CONTENT_AUTHORITY = "com.example.android.storeinventoryapp";
+
     private InventoryContract() {
     }
 
