@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.android.storeinventoryapp.data.InventoryContract;
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.android.storeinventoryapp.data.InventoryDbHelper;
 import java.text.DecimalFormat;
