@@ -3,6 +3,10 @@ package com.example.android.storeinventoryapp;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +18,9 @@ import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEnt
 import com.example.android.storeinventoryapp.data.InventoryDbHelper;
 import java.text.DecimalFormat;
 
-public class InventoryActivity extends AppCompatActivity {
+public class InventoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private final static String TAG = InventoryActivity.class.getSimpleName();
+    private static final int URL_LOADER = 0;
     private SQLiteDatabase db;
     private InventoryDbHelper mDbHelper;
 
@@ -137,5 +142,21 @@ public class InventoryActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
     }
 }
