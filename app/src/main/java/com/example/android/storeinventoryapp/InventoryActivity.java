@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.android.storeinventoryapp.data.InventoryContract;
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.android.storeinventoryapp.data.InventoryDbHelper;
 import java.text.DecimalFormat;
@@ -146,13 +148,35 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
 
     @NonNull
     @Override
-    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
-        return null;
+    public Loader<Cursor> onCreateLoader(int loaderId, @Nullable Bundle args) {
+        String[] projection = {
+            InventoryEntry.COLUMN_BOOK_NAME,
+            InventoryEntry.COLUMN_BOOK_PRICE_CENTS,
+            InventoryEntry.COLUMN_BOOK_PRICE,
+            InventoryEntry.COLUMN_BOOK_QUANTITY,
+            InventoryEntry.COLUMN_BOOK_SUPPLIER,
+            InventoryEntry.COLUMN_SUPPLIER_PHONE,
+            InventoryEntry.COLUMN_BOOK_ISBN,
+            InventoryEntry.COLUMN_BOOK_CONDITION
+        };
+
+        switch (loaderId) {
+            case URL_LOADER:
+                return new CursorLoader(
+                        this,
+                        InventoryEntry.CONTENT_URI,
+                        projection,
+                        null,
+                        null,
+                        null
+                );
+            default:
+                return null;
+        }
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-
     }
 
     @Override
