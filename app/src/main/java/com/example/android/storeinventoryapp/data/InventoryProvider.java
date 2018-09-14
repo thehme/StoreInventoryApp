@@ -1,6 +1,7 @@
 package com.example.android.storeinventoryapp.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -8,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
 
 public class InventoryProvider extends ContentProvider {
     public static final String TAG = InventoryProvider.class.getSimpleName();
@@ -50,11 +53,21 @@ public class InventoryProvider extends ContentProvider {
             case BOOKS:
                 // query directly with the parameters provider
                 // cursor will be returned with all data
-                cursor = database.query(InventoryContract.InventoryEntry.TABLE_NAME,
-                        projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = database.query(InventoryEntry.TABLE_NAME, projection,
+                        selection, selectionArgs, null, null, sortOrder);
                 break;
             case BOOK_ID:
+                // setup query string
+                selection = InventoryEntry._ID + "=?";
+                // get uri id to use in query string
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+
+                // perform query on db for single item
+                cursor = database.query(InventoryEntry.TABLE_NAME, projection, selection,
+                        selectionArgs, null, null, sortOrder);
                 break;
+            default:
+                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
         // set listener up for change in db
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
