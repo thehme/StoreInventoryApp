@@ -23,8 +23,11 @@ public class InventoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
+    }
 
-        mDbHelper = new InventoryDbHelper(this);
+    @Override
+    protected void onStart() {
+        super.onStart();
         displayDatabaseEntries();
     }
 
@@ -64,10 +67,10 @@ public class InventoryActivity extends AppCompatActivity {
     }
 
     private void displayDatabaseEntries() {
-        mDbHelper = new InventoryDbHelper(this);
+//        mDbHelper = new InventoryDbHelper(this);
 
         // need db in readable mode
-        db = mDbHelper.getReadableDatabase();
+//        db = mDbHelper.getReadableDatabase();
 
         // create projection array with all columns needed from db
         String[] projection = {
@@ -82,7 +85,15 @@ public class InventoryActivity extends AppCompatActivity {
         };
 
         // create a cursor of the db with query string retrieving the above projection
-        Cursor cursor = db.query(InventoryEntry.TABLE_NAME, projection, null, null, null, null, null);
+//        Cursor cursor = db.query(InventoryEntry.TABLE_NAME, projection, null, null, null, null, null);
+
+        Cursor cursor = getContentResolver().query(
+                InventoryEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
 
         try {
             // find TextView with id inventory_text_view to temporarily display data
