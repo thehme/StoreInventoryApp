@@ -73,7 +73,7 @@ public class InventoryProvider extends ContentProvider {
         }
         // set listener up for change in db
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
-        return null;
+        return cursor;
     }
 
     @Nullable
