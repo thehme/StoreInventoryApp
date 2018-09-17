@@ -22,7 +22,6 @@ public final class InventoryContract {
         public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_BOOK_NAME = "title";
         public final static String COLUMN_BOOK_PRICE_CENTS = "price_cents";
-        public final static String COLUMN_BOOK_PRICE = "price";
         public final static String COLUMN_BOOK_QUANTITY = "quantity";
         public final static String COLUMN_BOOK_SUPPLIER = "supplier_name";
         public final static String COLUMN_SUPPLIER_PHONE = "phone_number";
