@@ -17,6 +17,9 @@ public class InventoryProvider extends ContentProvider {
     public static final String TAG = InventoryProvider.class.getSimpleName();
     private InventoryDbHelper inventoryDbHelper;
 
+    // define cursor to hold result from query operation
+    private Cursor cursor;
+
     // uri codes
     private static final int BOOKS = 100;
     private static final int BOOK_ID = 101;
@@ -46,9 +49,6 @@ public class InventoryProvider extends ContentProvider {
                         @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         // Get readable db
         SQLiteDatabase database = inventoryDbHelper.getReadableDatabase();
-
-        // define cursor to hold result from query operation
-        Cursor cursor;
 
         int match = sUriMatcher.match(uri);
         switch (match) {
