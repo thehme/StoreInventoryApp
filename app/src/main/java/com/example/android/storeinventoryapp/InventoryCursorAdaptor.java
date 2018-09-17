@@ -12,6 +12,8 @@ import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEnt
 import java.text.DecimalFormat;
 
 public class InventoryCursorAdaptor extends CursorAdapter {
+    private static final String TAG = InventoryCursorAdaptor.class.getSimpleName();
+
     public InventoryCursorAdaptor(Context context, Cursor c) {
         super(context, c, 0);
     }
