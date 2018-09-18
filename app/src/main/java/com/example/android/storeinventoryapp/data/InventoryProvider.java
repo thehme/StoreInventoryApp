@@ -17,6 +17,9 @@ public class InventoryProvider extends ContentProvider {
     public static final String TAG = InventoryProvider.class.getSimpleName();
     private InventoryDbHelper inventoryDbHelper;
 
+    // this cursor will hold the result of the query
+    private Cursor cursor;
+
     // uri codes
     private static final int BOOKS = 100;
     private static final int BOOK_ID = 101;
@@ -46,9 +49,6 @@ public class InventoryProvider extends ContentProvider {
                         @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         // Get readable db
         SQLiteDatabase database = inventoryDbHelper.getReadableDatabase();
-
-        // define cursor to hold result from query operation
-        Cursor cursor;
 
         int match = sUriMatcher.match(uri);
         switch (match) {
@@ -85,7 +85,37 @@ public class InventoryProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOKS:
+                Uri uriResult = insertBook(uri, contentValues);
+                return uriResult;
+            default:
+                // can't insert on row where pet already exists
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Insert a book into the db with the given content values.
+     * @param uri
+     * @param values
+     * @return new content URI for the specified row in the db
+     */
+    private Uri insertBook(Uri uri, ContentValues values) {
+        SQLiteDatabase database = inventoryDbHelper.getWritableDatabase();
+
+        long id = database.insert(
+                InventoryEntry.TABLE_NAME,
+                null,
+                values
+        );
+        if (id == -1) {
+            Log.e(TAG, "Error inserting new book into db for " + uri);
+            return null;
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
