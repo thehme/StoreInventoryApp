@@ -1,7 +1,16 @@
 <resources>
     <string name="app_name">Books Inventory</string>
     <string name="insert_dummy_data">Insert Dummy Data</string>
+    <!-- Summary -->
     <string name="summary_label">Summary</string>
     <string name="hint_book_title">Book title</string>
     <string name="hint_book_price">Price</string>
+    <string name="hint_book_quantity">Quantity</string>
+    <string name="hint_book_isbn">ISBN</string>
+    <!-- Supplier -->
+    <string name="supplier_label">Supplier</string>
+    <string name="hint_supplier_name">Name</string>
+    <string name="hint_supplier_phone_number">Phone number</string>
+    <!-- Book condition-->
+    <string name="condition_label">Condition</string>
 </resources>

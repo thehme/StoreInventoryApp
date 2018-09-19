@@ -8,12 +8,25 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Style for condition in the editor -->
+    <style name="ConditionStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+    </style>
+
     <!-- Style for labels in Editor screen -->
     <style name="LabelStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:paddingTop">16dp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
