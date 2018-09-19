@@ -24,6 +24,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_action_book/ic_action_book"/>
+        android:src="@drawable/ic_action_book"/>
 
 </RelativeLayout>
