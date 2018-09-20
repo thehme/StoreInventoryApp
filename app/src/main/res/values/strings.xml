@@ -13,4 +13,6 @@
     <string name="hint_supplier_phone_number">Phone number</string>
     <!-- Book condition-->
     <string name="condition_label">Condition</string>
+    <string name="edit_book">Edit book</string>
+    <string name="add_book">Add book</string>
 </resources>
