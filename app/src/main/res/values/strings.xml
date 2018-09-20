@@ -17,4 +17,7 @@
     <string name="add_book">Add book</string>
     <string name="zero_quantity">0</string>
     <string name="sale_button">Sale</string>
+    <!-- Menu options -->
+    <string name="action_save">Save book</string>
+    <string name="action_delete">Delete book</string>
 </resources>
