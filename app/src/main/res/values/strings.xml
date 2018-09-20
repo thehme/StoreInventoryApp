@@ -15,4 +15,6 @@
     <string name="condition_label">Condition</string>
     <string name="edit_book">Edit book</string>
     <string name="add_book">Add book</string>
+    <string name="zero_quantity">0</string>
+    <string name="sale_button">Sale</string>
 </resources>

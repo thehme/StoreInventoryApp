@@ -4,5 +4,8 @@
 
     <!-- Common margin value used throughout the app -->
     <dimen name="activity_margin">16dp</dimen>
+    <dimen name="book_name_size">18sp</dimen>
+    <dimen name="book_price_size">16sp</dimen>
+    <dimen name="book_quantity_size">18sp</dimen>
 </resources>
 
