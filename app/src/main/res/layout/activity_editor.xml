@@ -37,21 +37,22 @@
                 android:id="@+id/edit_book_price"
                 style="@style/EditorFieldStyle"
                 android:hint="@string/hint_book_price"
-                android:inputType="textCapWords" />
+                android:inputType="numberDecimal" />
 
             <!-- Quantity -->
             <EditText
                 android:id="@+id/edit_book_quantity"
                 style="@style/EditorFieldStyle"
                 android:hint="@string/hint_book_quantity"
-                android:inputType="textCapWords" />
+                android:inputType="number" />
 
             <!-- ISBN -->
             <EditText
                 android:id="@+id/edit_book_isbn"
                 style="@style/EditorFieldStyle"
                 android:hint="@string/hint_book_isbn"
-                android:inputType="textCapWords" />
+                android:maxLength="13"
+                android:inputType="number" />
         </LinearLayout>
     </LinearLayout>
 
