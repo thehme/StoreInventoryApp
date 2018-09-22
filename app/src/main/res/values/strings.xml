@@ -22,7 +22,7 @@
     <string name="action_save">Save book</string>
     <string name="action_delete">Delete book</string>
     <!-- condition values -->
-    <string name="condition_new">new</string>
-    <string name="condition_used">used</string>
-    <string name="condition_unknown">unknown</string>
+    <string name="condition_new">New</string>
+    <string name="condition_used">Used</string>
+    <string name="condition_unknown">Unknown</string>
 </resources>

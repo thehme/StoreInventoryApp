@@ -75,10 +75,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // apply the adapter to the spinner
         mBookConditionSpinner.setAdapter(conditionSpinnerAdapter);
 
-        // set the integer mSelected to the constant values
-        mBookConditionSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // set the integer mSelected to the constant values for book condition
+        mBookConditionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals(getString(R.string.condition_new))) {
