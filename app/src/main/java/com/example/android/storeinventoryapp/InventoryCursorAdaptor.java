@@ -37,16 +37,22 @@ public class InventoryCursorAdaptor extends CursorAdapter {
         // find list item text views were data will be populated
         TextView bookName = (TextView) view.findViewById(R.id.book_name);
         TextView bookPrice = (TextView) view.findViewById(R.id.book_price);
+        TextView bookQuantity = (TextView) view.findViewById(R.id.book_quantity);
 
         // get data from current cursor item
         String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_NAME));
+        int bookQuantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_QUANTITY);
+        String bookQuantityAvailable = Integer.toString(cursor.getInt(bookQuantityColumnIndex));
         int bookPriceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_PRICE_CENTS);
         int currentPriceCents = cursor.getInt(bookPriceColumnIndex);
         String price = calculateFormattedPrice(currentPriceCents);
+        price = "$" + price;
+
 
         // populate textViews with data
         bookName.setText(name);
         bookPrice.setText(price);
+        bookQuantity.setText(bookQuantityAvailable);
     }
     private String calculateFormattedPrice(int priceInCents) {
         DecimalFormat formatter = new DecimalFormat("##.00");

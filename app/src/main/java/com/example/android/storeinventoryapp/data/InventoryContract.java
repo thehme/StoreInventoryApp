@@ -28,10 +28,5 @@ public final class InventoryContract {
         public final static String COLUMN_BOOK_SUPPLIER = "supplier_name";
         public final static String COLUMN_SUPPLIER_PHONE = "phone_number";
         public final static String COLUMN_BOOK_ISBN = "isbn";
-        public final static String COLUMN_BOOK_CONDITION = "condition";
-
-        public final static int BOOK_CONDITION_NEW = 1;
-        public final static int BOOK_CONDITION_USED = 0;
-        public final static int BOOK_CONDITION_UNKNOWN = -1;
     }
 }
