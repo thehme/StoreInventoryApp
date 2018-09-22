@@ -32,7 +32,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText mBookSupplierPhoneNumber;
     private EditText mBookISBN;
     private Spinner mBookConditionSpinner;
-    private int mBookCondition;
+    private int mBookCondition = 0; // default to unknown
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,8 +122,31 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         return super.onOptionsItemSelected(item);
     }
 
-    public void saveBook() {
+    private int convertPriceToCents(String dollarCents) {
+        String[] splitPriceStrings = dollarCents.split(".");
+        int[] splitPrice = new int[splitPriceStrings.length];
+        for (int i = 0; i < splitPriceStrings.length; i++) {
+            splitPrice[i] = Integer.parseInt(splitPriceStrings[i]);
+        }
+        int priceInCents = splitPrice[0] + splitPrice[1];
+        return priceInCents;
+    }
 
+    public void saveBook() {
+        String titleString = mBookTitleEditText.getText().toString().trim();
+        String priceInDollarsCents = mBookPriceDollarsCents.getText().toString().trim();
+        int priceInCents = convertPriceToCents(priceInDollarsCents);
+        String bookQuantity = mBookQuantity.getText().toString().trim();
+        String bookSupplierName = mBookSupplierName.getText().toString().trim();
+        String bookSupplierPhoneNumber = mBookSupplierPhoneNumber.getText().toString().trim();
+        int bookISBN = Integer.parseInt(mBookISBN.getText().toString());
+        String bookCondition = mBookConditionSpinner.getSelectedItem().toString().toLowerCase();
+
+        if (bookCondition.equals("new")) {
+            mBookCondition = InventoryEntry.BOOK_CONDITION_NEW;
+        } else if (bookCondition.equals("used")) {
+            mBookCondition = InventoryEntry.BOOK_CONDITION_USED;
+        }
     }
 
     @Override
