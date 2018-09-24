@@ -2,12 +2,15 @@ package com.example.android.storeinventoryapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
+
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 
@@ -38,6 +41,7 @@ public class InventoryCursorAdaptor extends CursorAdapter {
         TextView bookName = (TextView) view.findViewById(R.id.book_name);
         TextView bookPrice = (TextView) view.findViewById(R.id.book_price);
         TextView bookQuantity = (TextView) view.findViewById(R.id.book_quantity);
+        TextView bookIsbn = (TextView) view.findViewById(R.id.book_isbn);
 
         // get data from current cursor item
         String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_NAME));
@@ -51,16 +55,15 @@ public class InventoryCursorAdaptor extends CursorAdapter {
         price = "$" + price;
 
         int isbnColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_ISBN);
-        int currentIsbn = cursor.getInt(isbnColumnIndex);
-        Object data = new Object();
-        data.setName = "isbn";
-        data.setId = 
+        String currentIsbn = cursor.getString(isbnColumnIndex);
+
+        Log.i(TAG, "current isbn: " + currentIsbn);
 
         // populate textViews with data
         bookName.setText(name);
-        bookName.setTag(currentIsbn);
         bookPrice.setText(price);
         bookQuantity.setText(bookQuantityAvailable);
+        bookIsbn.setText(currentIsbn);
     }
     private String calculateFormattedPrice(int priceInCents) {
         DecimalFormat formatter = new DecimalFormat("##.00");

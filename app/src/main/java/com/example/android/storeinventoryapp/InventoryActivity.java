@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.android.storeinventoryapp.data.InventoryDbHelper;
@@ -41,16 +43,6 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
             public void onClick(View view) {
                 Intent intent = new Intent(InventoryActivity.this, EditorActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        // setup on click event for button
-        Button saleButton = (Button) findViewById(R.id.sale_book_button);
-        saleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LinearLayout currentRow = (LinearLayout) view.getParent();
-
             }
         });
 
@@ -143,5 +135,37 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         inventoryCursorAdaptor.swapCursor(null);
+    }
+
+    public void onClickHandler(View view) {
+        // get the row the clicked button is in
+        LinearLayout grandParentRow = (LinearLayout) view.getParent().getParent();
+
+        // get view containing book name, price, and isbn
+        LinearLayout childView1 = (LinearLayout) grandParentRow.getChildAt(0);
+        // get view containing button and quantity
+        LinearLayout childView2 = (LinearLayout) grandParentRow.getChildAt(1);
+
+        // get textViews for book name, price, and isbn
+        TextView titleTextView = (TextView) childView1.getChildAt(0);
+        TextView priceTextView = (TextView) childView1.getChildAt(1);
+        TextView isbnTextView = (TextView) childView1.getChildAt(2);
+
+        // get text values from textViews for name and price
+        String bookTitle = titleTextView.getText().toString().trim();
+        String bookPrice = priceTextView.getText().toString().trim();
+        String bookIsbn = isbnTextView.getText().toString().trim();
+
+        // get textView for book quantity
+        TextView quantityTextView = (TextView) childView2.getChildAt(0);
+
+        // get text value for quantity
+        String bookQuantity = quantityTextView.getText().toString().trim();
+
+        Log.i(TAG, "clicked button");
+        Log.i(TAG, "book: " + bookTitle);
+        Log.i(TAG, "isbn: " + bookIsbn);
+        Log.i(TAG, "price: " + bookPrice);
+        Log.i(TAG, "quantity: " + bookQuantity);
     }
 }
