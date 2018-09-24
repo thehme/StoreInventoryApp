@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
@@ -42,6 +44,16 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
             }
         });
 
+        // setup on click event for button
+        Button saleButton = (Button) findViewById(R.id.sale_book_button);
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LinearLayout currentRow = (LinearLayout) view.getParent();
+
+            }
+        });
+
         // find reference to list view
         ListView listView = (ListView) findViewById(R.id.books_list);
 
@@ -61,6 +73,10 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_inventory, menu);
         return true;
+    }
+
+    private void updateItemFromInventory() {
+
     }
 
     private void insertItemToInventory() {

@@ -41,16 +41,24 @@ public class InventoryCursorAdaptor extends CursorAdapter {
 
         // get data from current cursor item
         String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_NAME));
+
         int bookQuantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_QUANTITY);
         String bookQuantityAvailable = Integer.toString(cursor.getInt(bookQuantityColumnIndex));
+
         int bookPriceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_PRICE_CENTS);
         int currentPriceCents = cursor.getInt(bookPriceColumnIndex);
         String price = calculateFormattedPrice(currentPriceCents);
         price = "$" + price;
 
+        int isbnColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_ISBN);
+        int currentIsbn = cursor.getInt(isbnColumnIndex);
+        Object data = new Object();
+        data.setName = "isbn";
+        data.setId = 
 
         // populate textViews with data
         bookName.setText(name);
+        bookName.setTag(currentIsbn);
         bookPrice.setText(price);
         bookQuantity.setText(bookQuantityAvailable);
     }
