@@ -162,10 +162,9 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         // get text value for quantity
         String bookQuantity = quantityTextView.getText().toString().trim();
 
-        Log.i(TAG, "clicked button");
-        Log.i(TAG, "book: " + bookTitle);
-        Log.i(TAG, "isbn: " + bookIsbn);
-        Log.i(TAG, "price: " + bookPrice);
-        Log.i(TAG, "quantity: " + bookQuantity);
+        ContentValues values = new ContentValues();
+        values.put(InventoryEntry.COLUMN_BOOK_NAME, bookTitle);
+        values.put(InventoryEntry.COLUMN_BOOK_QUANTITY, bookQuantity);
+        values.put(InventoryEntry.COLUMN_BOOK_ISBN, bookIsbn);
     }
 }
