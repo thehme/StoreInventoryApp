@@ -89,6 +89,7 @@ public class InventoryProvider extends ContentProvider {
         switch (match) {
             case BOOKS:
                 Uri uriResult = insertBook(uri, contentValues);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 return uriResult;
             default:
                 // can't insert on row where pet already exists
