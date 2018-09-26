@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
@@ -97,6 +98,44 @@ public class InventoryProvider extends ContentProvider {
         }
     }
 
+    private int calculatePriceInCents(String dollarCents) {
+        String[] separatedDollarCents = dollarCents.split("\\.");
+        return Integer.parseInt(separatedDollarCents[0]) + Integer.parseInt(separatedDollarCents[1]);
+    }
+
+    private void validateInputValues(ContentValues values) {
+        boolean inputsValid = true;
+         String title = values.getAsString(InventoryEntry.COLUMN_BOOK_NAME);
+         Log.i(TAG, "title: " + title);
+         if (title == null || TextUtils.isEmpty(title)) {
+             inputsValid = false;
+             throw new IllegalArgumentException("Book requires a title");
+         }
+         String priceString = values.getAsString(InventoryEntry.COLUMN_BOOK_PRICE_CENTS);
+         if (priceString == null || TextUtils.isEmpty(priceString)) {
+             inputsValid = false;
+             throw new IllegalArgumentException("Book requires a price");
+         }
+         int price = calculatePriceInCents(priceString);
+         if (price <= 0) {
+            inputsValid = false;
+            throw new IllegalArgumentException("Book requires a valid price");
+         }
+         String quantityString = values.getAsString(InventoryEntry.COLUMN_BOOK_QUANTITY);
+         if (quantityString == null) {
+             int quantity = Integer.parseInt(quantityString);
+             if (Double.isNaN(quantity) || quantity < 0) {
+                 inputsValid = false;
+                 throw new IllegalArgumentException("Book requires a valid quantity");
+             }
+         }
+         String isbn = values.getAsString(InventoryEntry.COLUMN_BOOK_ISBN);
+         if (isbn == null || TextUtils.isEmpty(isbn) || isbn.length() < 13) {
+             inputsValid = false;
+             throw new IllegalArgumentException("Book requires a valid 13 digit isbn");
+         }
+    }
+
     /**
      * Insert a book into the db with the given content values.
      * @param uri
@@ -104,6 +143,7 @@ public class InventoryProvider extends ContentProvider {
      * @return new content URI for the specified row in the db
      */
     private Uri insertBook(Uri uri, ContentValues values) {
+        validateInputValues(values);
         SQLiteDatabase database = inventoryDbHelper.getWritableDatabase();
 
         long id = database.insert(
