@@ -1,6 +1,7 @@
 package com.example.android.storeinventoryapp;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
@@ -47,6 +49,20 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
 
         inventoryCursorAdaptor = new InventoryCursorAdaptor(this, null);
         listView.setAdapter(inventoryCursorAdaptor);
+
+        // add click listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Log.i(TAG, "in on click event");
+                Intent editActivity = new Intent(InventoryActivity.this, EditorActivity.class);
+                // create uri using ContentUris.withAppendId to find specific book object
+                // content://com.example.android.books/id
+                Uri uri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
+                editActivity.setData(uri);
+                startActivity(editActivity);
+            }
+        });
 
         // initialize loader
         getLoaderManager().initLoader(URL_LOADER, null, this);
