@@ -11,6 +11,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -89,46 +90,89 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         return priceInCents;
     }
 
-    public void saveBook() {
-        String titleString = mBookTitleEditText.getText().toString().trim();
-        String priceInDollarsCents = mBookPriceDollarsCents.getText().toString().trim();
-        Log.i(TAG,"price string: " + priceInDollarsCents);
-        int priceInCents = convertPriceToCents(priceInDollarsCents);
-        String bookQuantity = mBookQuantity.getText().toString().trim();
-        String bookSupplierName = mBookSupplierName.getText().toString().trim();
-        String bookSupplierPhoneNumber = mBookSupplierPhoneNumber.getText().toString().trim();
-        String bookISBN = mBookISBN.getText().toString().trim();
-
-        try {
-            // create content values
-            ContentValues values = new ContentValues();
-            values.put(InventoryEntry.COLUMN_BOOK_NAME, titleString);
-            values.put(InventoryEntry.COLUMN_BOOK_PRICE_CENTS, priceInCents);
-            values.put(InventoryEntry.COLUMN_BOOK_QUANTITY, bookQuantity);
-            values.put(InventoryEntry.COLUMN_BOOK_SUPPLIER, bookSupplierName);
-            values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, bookSupplierPhoneNumber);
-            values.put(InventoryEntry.COLUMN_BOOK_ISBN, bookISBN);
-
-            // save or update book accordingly
-            if (mCurrentBookUri == null) {
-                Log.i(TAG, "insert new book");
-                Uri uri = getContentResolver().insert(
-                        InventoryEntry.CONTENT_URI,
-                        values
-                );
-                if (uri == null) {
-                    Log.i(TAG, "Error inserting data");
-                    Toast.makeText(this, R.string.editor_insert_failure, Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.i(TAG, "New data inserted");
-                    Toast.makeText(this, R.string.editor_insert_success, Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Log.i(TAG, "update existing book");
+    private boolean validateInputValues() {
+        boolean inputsAreValid = true;
+        String title = mBookTitleEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(title)) {
+            Log.i(TAG, "title required");
+            inputsAreValid = false;
+        }
+        String priceString = mBookPriceDollarsCents.getText().toString().trim();
+        if (TextUtils.isEmpty(priceString)) {
+            Log.i(TAG, "price required");
+            inputsAreValid = false;
+        } else {
+            int price = convertPriceToCents(priceString);
+            if (price <= 0) {
+                Log.i(TAG, "price must be greater or equal to 0");
+                inputsAreValid = false;
             }
+        }
+        String quantityString = mBookQuantity.getText().toString().trim();
+        if (TextUtils.isEmpty(quantityString)) {
+            Log.i(TAG, "quantity required");
+            inputsAreValid = false;
+        } else {
+            int quantity = Integer.parseInt(quantityString);
+            if (Double.isNaN(quantity) || quantity < 0) {
+                Log.i(TAG, "quantity must be greater or equal to 0");
+                inputsAreValid = false;
+            }
+        }
+        String isbn = mBookISBN.getText().toString().trim();
+        if (TextUtils.isEmpty(isbn) || isbn.length() < 13) {
+            Log.i(TAG, "ISBN must be 13 characters long");
+            inputsAreValid = false;
+        }
+        return inputsAreValid;
+    }
 
-        } catch (Exception e) {
-            Log.e(TAG, "Error saving to db", e);
+    public void saveBook() {
+        if (validateInputValues()) {
+
+            try {
+                // retrieve values from input fields
+                String titleString = mBookTitleEditText.getText().toString().trim();
+                String priceInDollarsCents = mBookPriceDollarsCents.getText().toString().trim();
+                Log.i(TAG, "price string: " + priceInDollarsCents);
+                int priceInCents = convertPriceToCents(priceInDollarsCents);
+                String bookQuantity = mBookQuantity.getText().toString().trim();
+                String bookSupplierName = mBookSupplierName.getText().toString().trim();
+                String bookSupplierPhoneNumber = mBookSupplierPhoneNumber.getText().toString().trim();
+                String bookISBN = mBookISBN.getText().toString().trim();
+
+                // create content values
+                ContentValues values = new ContentValues();
+                values.put(InventoryEntry.COLUMN_BOOK_NAME, titleString);
+                values.put(InventoryEntry.COLUMN_BOOK_PRICE_CENTS, priceInCents);
+                values.put(InventoryEntry.COLUMN_BOOK_QUANTITY, bookQuantity);
+                values.put(InventoryEntry.COLUMN_BOOK_SUPPLIER, bookSupplierName);
+                values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, bookSupplierPhoneNumber);
+                values.put(InventoryEntry.COLUMN_BOOK_ISBN, bookISBN);
+
+                // save or update book accordingly
+                if (mCurrentBookUri == null) {
+                    Log.i(TAG, "insert new book");
+                    Uri uri = getContentResolver().insert(
+                            InventoryEntry.CONTENT_URI,
+                            values
+                    );
+                    if (uri == null) {
+                        Log.i(TAG, "Error inserting data");
+                        Toast.makeText(this, R.string.editor_insert_failure, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.i(TAG, "New data inserted");
+                        Toast.makeText(this, R.string.editor_insert_success, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Log.i(TAG, "update existing book");
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "Error saving to db", e);
+            }
+        } else {
+            Log.e(TAG, "Error saving to db");
         }
     }
 
