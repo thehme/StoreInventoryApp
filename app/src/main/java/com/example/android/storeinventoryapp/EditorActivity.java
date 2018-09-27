@@ -270,10 +270,10 @@ public class EditorActivity extends AppCompatActivity
                             null
                     );
                     if (numUpdated > 0) {
-                        Log.i(TAG, "Book updated successfully");
+                        Log.i(TAG, "Book updating book");
                         Toast.makeText(this, R.string.editor_update_success, Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.i(TAG, "Error updating successfully");
+                        Log.i(TAG, "Error updating book");
                         Toast.makeText(this, R.string.editor_update_failure, Toast.LENGTH_SHORT).show();
                     }
                 }

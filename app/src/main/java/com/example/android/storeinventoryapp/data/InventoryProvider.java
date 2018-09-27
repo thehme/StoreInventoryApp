@@ -165,7 +165,39 @@ public class InventoryProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
+        if (contentValues.size() == 0) {
+            return 0;
+        }
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOKS:
+                return updateBook(uri, contentValues, selection, selectionArgs);
+            case BOOK_ID:
+                selection = InventoryEntry._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                return updateBook(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("update is not supported for " + uri);
+        }
+    }
+
+    private int updateBook(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        SQLiteDatabase database = inventoryDbHelper.getWritableDatabase();
+        int updatedNum = database.update(
+                InventoryEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs
+        );
+        if (updatedNum > 0) {
+            Log.i(TAG, "updated books: " + updatedNum);
+            // notify all listeners that a change has occurred to uri
+            // second parameter is optional observer, but passing null makes it so that
+            // by default cursor adapter object is notified
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return updatedNum;
     }
 }
