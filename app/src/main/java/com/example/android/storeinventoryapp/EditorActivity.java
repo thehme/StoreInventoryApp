@@ -1,6 +1,8 @@
 package com.example.android.storeinventoryapp;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -15,25 +18,41 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
 
+import java.text.DecimalFormat;
+
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = EditorActivity.class.getSimpleName();
+    private static final int URL_LOADER = 0;
+    // to keep track of whether data has been change or not
+    private boolean mBookHasChanged = false;
+
     private Uri mCurrentBookUri;
 
     // fields to enter book data
     private EditText mBookTitleEditText;
-    private EditText mBookPriceDollarsCents;
-    private EditText mBookQuantity;
-    private EditText mBookSupplierName;
-    private EditText mBookSupplierPhoneNumber;
-    private EditText mBookISBN;
+    private EditText mBookPriceDollarsCentsEditText;
+    private EditText mBookQuantityEditText;
+    private EditText mBookSupplierNameEditText;
+    private EditText mBookSupplierPhoneNumberEditText;
+    private EditText mBookISBNEditText;
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mBookHasChanged = true;
+            return false;
+        }
+    };
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
@@ -42,17 +61,29 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         if (mCurrentBookUri != null) {
             setTitle(R.string.edit_book);
+            // initialize loader
+            getLoaderManager().initLoader(URL_LOADER, null, this);
         } else {
             setTitle(R.string.add_book);
+            // Invalidate the options menu, so the "Delete" menu option can be hidden.
+            // (It doesn't make sense to delete a pet that hasn't been created yet.)
+            invalidateOptionsMenu();
         }
 
         // find all relevant views from which data will be read from
         mBookTitleEditText = (EditText) findViewById(R.id.edit_book_name);
-        mBookPriceDollarsCents = (EditText) findViewById(R.id.edit_book_price);
-        mBookQuantity = (EditText) findViewById(R.id.edit_book_quantity);
-        mBookSupplierName = (EditText) findViewById(R.id.edit_supplier_name);
-        mBookSupplierPhoneNumber = (EditText) findViewById(R.id.edit_supplier_phone_number);
-        mBookISBN = (EditText) findViewById(R.id.edit_book_isbn);
+        mBookPriceDollarsCentsEditText = (EditText) findViewById(R.id.edit_book_price);
+        mBookQuantityEditText = (EditText) findViewById(R.id.edit_book_quantity);
+        mBookSupplierNameEditText = (EditText) findViewById(R.id.edit_supplier_name);
+        mBookSupplierPhoneNumberEditText = (EditText) findViewById(R.id.edit_supplier_phone_number);
+        mBookISBNEditText = (EditText) findViewById(R.id.edit_book_isbn);
+
+        mBookTitleEditText.setOnTouchListener(mTouchListener);
+        mBookPriceDollarsCentsEditText.setOnTouchListener(mTouchListener);
+        mBookQuantityEditText.setOnTouchListener(mTouchListener);
+        mBookSupplierNameEditText.setOnTouchListener(mTouchListener);
+        mBookSupplierPhoneNumberEditText.setOnTouchListener(mTouchListener);
+        mBookISBNEditText.setOnTouchListener(mTouchListener);
     }
 
     @Override
@@ -74,9 +105,72 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             case R.id.action_delete:
                 return true;
             case android.R.id.home:
+                if (mBookHasChanged) {
+                    // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+                    // Create a click listener to handle the user confirming that
+                    // changes should be discarded.
+                    DialogInterface.OnClickListener discardButtonClickListener =
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    // User clicked "Discard" button, navigate to parent activity.
+                                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                                }
+                            };
+                    // Show a dialog that notifies the user they have unsaved changes
+                    showUnsavedChangesDialog(discardButtonClickListener);
+                } else {
+                    // Navigate back to parent activity (InventoryActivity)
+                    NavUtils.navigateUpFromSameTask(this);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the positive and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.unsaved_changes_dialog_msg);
+        builder.setPositiveButton(R.string.discard, discardButtonClickListener);
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Keep editing" button, so dismiss the dialog
+                // and continue editing the pet.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * This method is called when the back button is pressed.
+     */
+    @Override
+    public void onBackPressed() {
+        // If the pet hasn't changed, continue with handling back button press
+        if (!mBookHasChanged) {
+            super.onBackPressed();
+            return;
+        }
+        // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+        // Create a click listener to handle the user confirming that changes should be discarded.
+        DialogInterface.OnClickListener discardButtonClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // User clicked "Discard" button, close the current activity.
+                        finish();
+                    }
+                };
+        // Show dialog that there are unsaved changes
+        showUnsavedChangesDialog(discardButtonClickListener);
     }
 
     private int convertPriceToCents(String dollarCents) {
@@ -97,7 +191,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             Log.i(TAG, "title required");
             inputsAreValid = false;
         }
-        String priceString = mBookPriceDollarsCents.getText().toString().trim();
+        String priceString = mBookPriceDollarsCentsEditText.getText().toString().trim();
         if (TextUtils.isEmpty(priceString)) {
             Log.i(TAG, "price required");
             inputsAreValid = false;
@@ -108,7 +202,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 inputsAreValid = false;
             }
         }
-        String quantityString = mBookQuantity.getText().toString().trim();
+        String quantityString = mBookQuantityEditText.getText().toString().trim();
         if (TextUtils.isEmpty(quantityString)) {
             Log.i(TAG, "quantity required");
             inputsAreValid = false;
@@ -119,7 +213,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 inputsAreValid = false;
             }
         }
-        String isbn = mBookISBN.getText().toString().trim();
+        String isbn = mBookISBNEditText.getText().toString().trim();
         if (TextUtils.isEmpty(isbn) || isbn.length() < 13) {
             Log.i(TAG, "ISBN must be 13 characters long");
             inputsAreValid = false;
@@ -129,17 +223,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     public void saveBook() {
         if (validateInputValues()) {
-
             try {
                 // retrieve values from input fields
                 String titleString = mBookTitleEditText.getText().toString().trim();
-                String priceInDollarsCents = mBookPriceDollarsCents.getText().toString().trim();
+                String priceInDollarsCents = mBookPriceDollarsCentsEditText.getText().toString().trim();
                 Log.i(TAG, "price string: " + priceInDollarsCents);
                 int priceInCents = convertPriceToCents(priceInDollarsCents);
-                String bookQuantity = mBookQuantity.getText().toString().trim();
-                String bookSupplierName = mBookSupplierName.getText().toString().trim();
-                String bookSupplierPhoneNumber = mBookSupplierPhoneNumber.getText().toString().trim();
-                String bookISBN = mBookISBN.getText().toString().trim();
+                String bookQuantity = mBookQuantityEditText.getText().toString().trim();
+                String bookSupplierName = mBookSupplierNameEditText.getText().toString().trim();
+                String bookSupplierPhoneNumber = mBookSupplierPhoneNumberEditText.getText().toString().trim();
+                String bookISBN = mBookISBNEditText.getText().toString().trim();
 
                 // create content values
                 ContentValues values = new ContentValues();
@@ -166,8 +259,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                     }
                 } else {
                     Log.i(TAG, "update existing book");
+                    int numUpdated = getContentResolver().update(
+                            mCurrentBookUri,
+                            values,
+                            null,
+                            null
+                    );
+                    if (numUpdated > 0) {
+                        Log.i(TAG, "Book updated successfully");
+                        Toast.makeText(this, R.string.editor_update_success, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.i(TAG, "Error updating successfully");
+                        Toast.makeText(this, R.string.editor_update_failure, Toast.LENGTH_SHORT).show();
+                    }
                 }
-
             } catch (Exception e) {
                 Log.e(TAG, "Error saving to db", e);
             }
@@ -209,13 +314,44 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         );
     }
 
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-
+    private String calculateFormattedPrice(int priceInCents) {
+        DecimalFormat formatter = new DecimalFormat("##.00");
+        double currentBookPrice = priceInCents / 100.0;
+        return formatter.format(currentBookPrice);
     }
 
     @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor.moveToFirst()) {
+            // get data from current cursor item
+            String title = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_NAME));
+            mBookTitleEditText.setText(title);
 
+            int priceInCents = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_PRICE_CENTS));
+            String price = calculateFormattedPrice(priceInCents);
+            mBookPriceDollarsCentsEditText.setText(price);
+
+            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_QUANTITY));
+            mBookQuantityEditText.setText(quantity);
+
+            String supplierName = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_SUPPLIER));
+            mBookSupplierNameEditText.setText(supplierName);
+
+            String supplierPhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_SUPPLIER_PHONE));
+            mBookSupplierPhoneNumberEditText.setText(supplierPhoneNumber);
+
+            int isbn = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_ISBN));
+            mBookISBNEditText.setText(isbn);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mBookTitleEditText.setText("");
+        mBookPriceDollarsCentsEditText.setText("");
+        mBookQuantityEditText.setText("");
+        mBookSupplierNameEditText.setText("");
+        mBookSupplierPhoneNumberEditText.setText("");
+        mBookISBNEditText.setText("");
     }
 }
