@@ -4,15 +4,18 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
+//import android.support.v4.app.LoaderManager;
+import android.app.LoaderManager;
 import android.support.v4.app.NavUtils;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+//import android.support.v4.content.CursorLoader;
+import android.content.CursorLoader;
+//import android.support.v4.content.Loader;
+//import android.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,7 +30,8 @@ import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEnt
 
 import java.text.DecimalFormat;
 
-public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class EditorActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = EditorActivity.class.getSimpleName();
     private static final int URL_LOADER = 0;
     // to keep track of whether data has been change or not
@@ -291,7 +295,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         return true;
     }
 
-    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, @Nullable Bundle args) {
         // create projection array with all columns needed to store to db
@@ -332,7 +335,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mBookPriceDollarsCentsEditText.setText(price);
 
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_QUANTITY));
-            mBookQuantityEditText.setText(quantity);
+            String quantityString = Integer.toString(quantity);
+            mBookQuantityEditText.setText(quantityString);
 
             String supplierName = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_SUPPLIER));
             mBookSupplierNameEditText.setText(supplierName);
@@ -341,7 +345,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mBookSupplierPhoneNumberEditText.setText(supplierPhoneNumber);
 
             int isbn = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_ISBN));
-            mBookISBNEditText.setText(isbn);
+            String isbnString = Integer.toString(isbn);
+            mBookISBNEditText.setText(isbnString);
         }
     }
 
