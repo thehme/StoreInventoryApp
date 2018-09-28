@@ -79,7 +79,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         return true;
     }
 
-    private void insertItemToInventory() {
+    private void insertDummyItemIntoInventory() {
         try {
             ContentValues values = new ContentValues();
             values.put(InventoryEntry.COLUMN_BOOK_NAME, "Qué cosas dice mi abuela!");
@@ -103,7 +103,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_insert_dummy_data:
-                insertItemToInventory();
+                insertDummyItemIntoInventory();
                 return true;
         }
         return super.onOptionsItemSelected(item);

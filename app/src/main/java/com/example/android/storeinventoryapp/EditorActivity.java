@@ -344,9 +344,8 @@ public class EditorActivity extends AppCompatActivity
             String supplierPhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_SUPPLIER_PHONE));
             mBookSupplierPhoneNumberEditText.setText(supplierPhoneNumber);
 
-            int isbn = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_ISBN));
-            String isbnString = Integer.toString(isbn);
-            mBookISBNEditText.setText(isbnString);
+            String isbn = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_ISBN));
+            mBookISBNEditText.setText(isbn);
         }
     }
 
