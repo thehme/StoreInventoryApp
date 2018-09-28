@@ -100,6 +100,7 @@ public class InventoryProvider extends ContentProvider {
 
     private int calculatePriceInCents(String dollarCents) {
         String[] separatedDollarCents = dollarCents.split("\\.");
+        Log.i(TAG, "size of price: " + separatedDollarCents.length);
         return Integer.parseInt(separatedDollarCents[0]) + Integer.parseInt(separatedDollarCents[1]);
     }
 
@@ -112,14 +113,10 @@ public class InventoryProvider extends ContentProvider {
              throw new IllegalArgumentException("Book requires a title");
          }
          String priceString = values.getAsString(InventoryEntry.COLUMN_BOOK_PRICE_CENTS);
+         Log.i(TAG, "price string: " + priceString);
          if (priceString == null || TextUtils.isEmpty(priceString)) {
              inputsValid = false;
              throw new IllegalArgumentException("Book requires a price");
-         }
-         int price = calculatePriceInCents(priceString);
-         if (price <= 0) {
-            inputsValid = false;
-            throw new IllegalArgumentException("Book requires a valid price");
          }
          String quantityString = values.getAsString(InventoryEntry.COLUMN_BOOK_QUANTITY);
          if (quantityString == null) {

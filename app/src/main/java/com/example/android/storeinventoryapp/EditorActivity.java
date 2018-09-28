@@ -231,7 +231,6 @@ public class EditorActivity extends AppCompatActivity
                 // retrieve values from input fields
                 String titleString = mBookTitleEditText.getText().toString().trim();
                 String priceInDollarsCents = mBookPriceDollarsCentsEditText.getText().toString().trim();
-                Log.i(TAG, "price string: " + priceInDollarsCents);
                 int priceInCents = convertPriceToCents(priceInDollarsCents);
                 String bookQuantity = mBookQuantityEditText.getText().toString().trim();
                 String bookSupplierName = mBookSupplierNameEditText.getText().toString().trim();
