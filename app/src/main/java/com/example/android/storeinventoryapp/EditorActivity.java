@@ -160,7 +160,24 @@ public class EditorActivity extends AppCompatActivity
     }
 
     private void deleteBook() {
-
+        try {
+            if (mCurrentBookUri != null) {
+                int numDeleted = getContentResolver().delete(
+                        mCurrentBookUri, null, null
+                );
+                if (numDeleted > 0) {
+                    Log.i(TAG, "book deleted successfully");
+                    Toast.makeText(this, R.string.editor_delete_book_successful, Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.i(TAG, "failed to delete book");
+                    Toast.makeText(this, R.string.editor_delete_book_failure, Toast.LENGTH_SHORT).show();
+                }
+            }
+            // close activity
+            finish();
+        } catch (Exception e) {
+            Log.e(TAG, "Error deleting book");
+        }
     }
 
     private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {

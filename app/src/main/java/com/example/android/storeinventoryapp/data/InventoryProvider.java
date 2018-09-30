@@ -144,8 +144,35 @@ public class InventoryProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOKS:
+                return deleteBook(uri, selection, selectionArgs);
+            case BOOK_ID:
+                selection = InventoryEntry._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                return deleteBook(uri, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("delete not supported for " + uri);
+        }
+    }
+
+    private int deleteBook(Uri uri, String selection, String[] selectionArgs) {
+        SQLiteDatabase database = inventoryDbHelper.getWritableDatabase();
+        int deletedNum = database.delete(
+                InventoryEntry.TABLE_NAME,
+                selection,
+                selectionArgs
+        );
+        Log.i(TAG, "deleted" + deletedNum + " books" );
+        if (deletedNum > 0) {
+            // notify all listeners that a change has occurred to uri
+            // second parameter is optional observer, but passing null makes it so that
+            // by default cursor adapter object is notified
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return deletedNum;
     }
 
     @Override
