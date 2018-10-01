@@ -54,6 +54,7 @@ public class InventoryCursorAdaptor extends CursorAdapter {
         bookPrice.setText(price);
         bookQuantity.setText(bookQuantityAvailable);
     }
+
     private String calculateFormattedPrice(int priceInCents) {
         DecimalFormat formatter = new DecimalFormat("##.00");
         double currentBookPrice = priceInCents / 100.0;

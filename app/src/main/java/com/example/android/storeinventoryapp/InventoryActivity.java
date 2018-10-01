@@ -144,4 +144,8 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     public void onLoaderReset(Loader<Cursor> loader) {
         inventoryCursorAdaptor.swapCursor(null);
     }
+
+    public void decrementBookQuantity(View view) {
+        Log.i(TAG, "decrement book quantity by 1");
+    }
 }
