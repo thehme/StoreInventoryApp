@@ -55,23 +55,19 @@ public class InventoryCursorAdaptor extends CursorAdapter {
         bookName.setText(name);
         bookPrice.setText(price);
         bookQuantity.setText(bookQuantityAvailable);
-    }
 
-    private String calculateFormattedPrice(int priceInCents) {
-        DecimalFormat formatter = new DecimalFormat("##.00");
-        double currentBookPrice = priceInCents / 100.0;
-        return formatter.format(currentBookPrice);
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Button saleButton = (Button) convertView.findViewById(R.id.sale_book_button);
+        Button saleButton = (Button) view.findViewById(R.id.sale_book_button);
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "in on-click event");
             }
         });
-        return super.getView(position, convertView, parent);
+    }
+
+    private String calculateFormattedPrice(int priceInCents) {
+        DecimalFormat formatter = new DecimalFormat("##.00");
+        double currentBookPrice = priceInCents / 100.0;
+        return formatter.format(currentBookPrice);
     }
 }
