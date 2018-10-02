@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
@@ -143,9 +144,5 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         inventoryCursorAdaptor.swapCursor(null);
-    }
-
-    public void decrementBookQuantity(View view) {
-        Log.i(TAG, "decrement book quantity by 1");
     }
 }

@@ -2,9 +2,11 @@ package com.example.android.storeinventoryapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
@@ -59,5 +61,17 @@ public class InventoryCursorAdaptor extends CursorAdapter {
         DecimalFormat formatter = new DecimalFormat("##.00");
         double currentBookPrice = priceInCents / 100.0;
         return formatter.format(currentBookPrice);
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Button saleButton = (Button) convertView.findViewById(R.id.sale_book_button);
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "in on-click event");
+            }
+        });
+        return super.getView(position, convertView, parent);
     }
 }

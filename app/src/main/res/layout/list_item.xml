@@ -56,7 +56,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:focusable="false"
-            android:onClick="decrementBookQuantity"
             android:text="@string/sale_button" />
 
     </LinearLayout>
