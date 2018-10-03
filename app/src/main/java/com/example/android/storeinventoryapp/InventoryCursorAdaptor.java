@@ -19,7 +19,6 @@ import java.text.DecimalFormat;
 
 public class InventoryCursorAdaptor extends CursorAdapter {
     private static final String TAG = InventoryCursorAdaptor.class.getSimpleName();
-    private int bookQuantityInt;
 
     public InventoryCursorAdaptor(Context context, Cursor c) {
         super(context, c, 0);
@@ -47,12 +46,12 @@ public class InventoryCursorAdaptor extends CursorAdapter {
         // find list item text views were data will be populated
         TextView bookName = (TextView) view.findViewById(R.id.book_name);
         TextView bookPrice = (TextView) view.findViewById(R.id.book_price);
-        final TextView bookQuantity = (TextView) view.findViewById(R.id.book_quantity);
+        TextView bookQuantity = (TextView) view.findViewById(R.id.book_quantity);
 
         // get data from current cursor item
         String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_NAME));
         int bookQuantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_QUANTITY);
-        bookQuantityInt = cursor.getInt(bookQuantityColumnIndex);
+        int bookQuantityInt = cursor.getInt(bookQuantityColumnIndex);
         if (bookQuantityInt == 1) {
             saleButton.setEnabled(false);
         }
@@ -71,9 +70,16 @@ public class InventoryCursorAdaptor extends CursorAdapter {
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry._ID));
-                Uri mCurrentBookUri = Uri.withAppendedPath(InventoryEntry.CONTENT_URI, Integer.toString(id));
+                // find book id based on cursor
+                int bookId = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry._ID));
+                // create uri to match book by id
+                Uri mCurrentBookUri = Uri.withAppendedPath(InventoryEntry.CONTENT_URI, Integer.toString(bookId));
+                // get book quantity
+                int bookQuantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_QUANTITY);
+                int bookQuantityInt = cursor.getInt(bookQuantityColumnIndex);
 
+                Log.i(TAG, "book id: " + Integer.toString(bookId));
+                Log.i(TAG, "book uri: " + mCurrentBookUri.toString());
                 if (bookQuantityInt > 1) {
                     ContentValues values = new ContentValues();
                     bookQuantityInt = bookQuantityInt - 1;
@@ -85,6 +91,10 @@ public class InventoryCursorAdaptor extends CursorAdapter {
                             null,
                             null
                     );
+
+                    if (numUpdated > 0) {
+                        Log.i(TAG, "updated quantity of " + numUpdated + " book");
+                    }
                 }
             }
         });
