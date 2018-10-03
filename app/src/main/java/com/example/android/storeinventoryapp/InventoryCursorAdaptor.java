@@ -1,7 +1,11 @@
 package com.example.android.storeinventoryapp;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,7 @@ import java.text.DecimalFormat;
 
 public class InventoryCursorAdaptor extends CursorAdapter {
     private static final String TAG = InventoryCursorAdaptor.class.getSimpleName();
+    private int bookQuantityInt;
 
     public InventoryCursorAdaptor(Context context, Cursor c) {
         super(context, c, 0);
@@ -35,16 +40,23 @@ public class InventoryCursorAdaptor extends CursorAdapter {
      * @param cursor    cursor from which to get data
      */
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
+        // find sale button
+        final Button saleButton = (Button) view.findViewById(R.id.sale_book_button);
+
         // find list item text views were data will be populated
         TextView bookName = (TextView) view.findViewById(R.id.book_name);
         TextView bookPrice = (TextView) view.findViewById(R.id.book_price);
-        TextView bookQuantity = (TextView) view.findViewById(R.id.book_quantity);
+        final TextView bookQuantity = (TextView) view.findViewById(R.id.book_quantity);
 
         // get data from current cursor item
         String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_NAME));
         int bookQuantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_QUANTITY);
-        String bookQuantityAvailable = Integer.toString(cursor.getInt(bookQuantityColumnIndex));
+        bookQuantityInt = cursor.getInt(bookQuantityColumnIndex);
+        if (bookQuantityInt == 1) {
+            saleButton.setEnabled(false);
+        }
+        final String bookQuantityAvailable = Integer.toString(bookQuantityInt);
         int bookPriceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_PRICE_CENTS);
         int currentPriceCents = cursor.getInt(bookPriceColumnIndex);
         String price = calculateFormattedPrice(currentPriceCents);
@@ -56,11 +68,24 @@ public class InventoryCursorAdaptor extends CursorAdapter {
         bookPrice.setText(price);
         bookQuantity.setText(bookQuantityAvailable);
 
-        Button saleButton = (Button) view.findViewById(R.id.sale_book_button);
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "in on-click event");
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry._ID));
+                Uri mCurrentBookUri = Uri.withAppendedPath(InventoryEntry.CONTENT_URI, Integer.toString(id));
+
+                if (bookQuantityInt > 1) {
+                    ContentValues values = new ContentValues();
+                    bookQuantityInt = bookQuantityInt - 1;
+                    values.put(InventoryEntry.COLUMN_BOOK_QUANTITY, bookQuantityInt);
+
+                    int numUpdated = context.getContentResolver().update(
+                            mCurrentBookUri,
+                            values,
+                            null,
+                            null
+                    );
+                }
             }
         });
     }
