@@ -195,6 +195,7 @@ public class InventoryProvider extends ContentProvider {
     }
 
     private int updateBook(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        Log.i(TAG, "book uri being updated: " + uri.toString());
         SQLiteDatabase database = inventoryDbHelper.getWritableDatabase();
         int updatedNum = database.update(
                 InventoryEntry.TABLE_NAME,
