@@ -296,7 +296,6 @@ public class EditorActivity extends AppCompatActivity
 
                 // save or update book accordingly
                 if (mCurrentBookUri == null) {
-                    Log.i(TAG, "insert new book");
                     Uri uri = getContentResolver().insert(
                             InventoryEntry.CONTENT_URI,
                             values
@@ -309,7 +308,6 @@ public class EditorActivity extends AppCompatActivity
                         Toast.makeText(this, R.string.editor_insert_success, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.i(TAG, "update existing book");
                     int numUpdated = getContentResolver().update(
                             mCurrentBookUri,
                             values,
