@@ -61,8 +61,11 @@ public class InventoryCursorAdaptor extends CursorAdapter {
 
         if (bookQuantityInt == 0) {
             saleButton.setEnabled(false);
+        } else {
+            saleButton.setEnabled(true);
         }
         final String bookQuantityAvailable = Integer.toString(bookQuantityInt);
+        Log.i(TAG, name + " has book quantity available: " + bookQuantityAvailable);
         int bookPriceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_PRICE_CENTS);
         int currentPriceCents = cursor.getInt(bookPriceColumnIndex);
         String price = calculateFormattedPrice(currentPriceCents);

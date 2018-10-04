@@ -75,7 +75,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
             values.put(InventoryEntry.COLUMN_BOOK_SUPPLIER, "Scholastic");
             values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, "1-800-770-4662");
             values.put(InventoryEntry.COLUMN_BOOK_ISBN, "9780545328630");
-            
+
             Uri uri = getContentResolver().insert(
                     InventoryEntry.CONTENT_URI,
                     values
