@@ -48,8 +48,9 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="@string/editor_minus_button"
-                    android:layout_gravity="left"/>
-                <EditText
+                    android:layout_gravity="left"
+                    android:id="@+id/minus_button"/>
+                <TextView
                     android:id="@+id/edit_book_quantity"
                     style="@style/EditorQuantityFieldStyle"
                     android:hint="@string/hint_book_quantity"
@@ -59,7 +60,8 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="@string/editor_plus_button"
-                    android:layout_gravity="right"/>
+                    android:layout_gravity="right"
+                    android:id="@+id/minus_plus"/>
             </LinearLayout>
 
             <!-- ISBN -->
