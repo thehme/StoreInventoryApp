@@ -63,7 +63,7 @@
                     android:text="@string/editor_plus_button"
                     android:layout_gravity="right"
                     android:textStyle="bold"
-                    android:id="@+id/minus_plus"/>
+                    android:id="@+id/plus_button"/>
             </LinearLayout>
 
             <!-- ISBN -->

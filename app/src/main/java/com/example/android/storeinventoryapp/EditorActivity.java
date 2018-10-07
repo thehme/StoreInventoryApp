@@ -109,6 +109,15 @@ public class EditorActivity extends AppCompatActivity
                 }
             }
         });
+
+        final Button increaseButton = (Button) findViewById(R.id.plus_button);
+        increaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bookQuantity = bookQuantity + 1;
+                displayQuantity(bookQuantity);
+            }
+        });
     }
 
     private void displayQuantity(int numberQuantity) {
