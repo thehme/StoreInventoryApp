@@ -46,4 +46,6 @@
     <!-- Plus/Minus -->
     <string name="editor_plus_button">+</string>
     <string name="editor_minus_button">-</string>
+    <!-- Re-order button text -->
+    <string name="editor_reorder_button">Re-order</string>
 </resources>
