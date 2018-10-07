@@ -49,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/editor_minus_button"
                     android:layout_gravity="left"
+                    android:textStyle="bold"
                     android:id="@+id/minus_button"/>
                 <TextView
                     android:id="@+id/edit_book_quantity"
@@ -61,6 +62,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/editor_plus_button"
                     android:layout_gravity="right"
+                    android:textStyle="bold"
                     android:id="@+id/minus_plus"/>
             </LinearLayout>
 

@@ -83,7 +83,6 @@ public class EditorActivity extends AppCompatActivity
         mBookTitleEditText = (EditText) findViewById(R.id.edit_book_name);
         mBookPriceDollarsCentsEditText = (EditText) findViewById(R.id.edit_book_price);
         mBookQuantityTextView = (TextView) findViewById(R.id.edit_book_quantity);
-        bookQuantity  = Integer.parseInt(mBookQuantityTextView.getText().toString());
         mBookSupplierNameEditText = (EditText) findViewById(R.id.edit_supplier_name);
         mBookSupplierPhoneNumberEditText = (EditText) findViewById(R.id.edit_supplier_phone_number);
         mBookISBNEditText = (EditText) findViewById(R.id.edit_book_isbn);
@@ -99,7 +98,7 @@ public class EditorActivity extends AppCompatActivity
         decreaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (bookQuantity > 1) {
+                if (bookQuantity >= 1) {
                     if (!decreaseButton.isEnabled()) {
                         decreaseButton.setEnabled(true);
                     }
@@ -409,6 +408,7 @@ public class EditorActivity extends AppCompatActivity
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_QUANTITY));
             String quantityString = Integer.toString(quantity);
             mBookQuantityTextView.setText(quantityString);
+            bookQuantity = Integer.parseInt(quantityString);
 
             String supplierName = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_SUPPLIER));
             mBookSupplierNameEditText.setText(supplierName);
