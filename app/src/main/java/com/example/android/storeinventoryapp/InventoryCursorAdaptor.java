@@ -1,7 +1,5 @@
 package com.example.android.storeinventoryapp;
 
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -65,7 +63,6 @@ public class InventoryCursorAdaptor extends CursorAdapter {
             saleButton.setEnabled(true);
         }
         final String bookQuantityAvailable = Integer.toString(bookQuantityInt);
-        Log.i(TAG, name + " has book quantity available: " + bookQuantityAvailable);
         int bookPriceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_BOOK_PRICE_CENTS);
         int currentPriceCents = cursor.getInt(bookPriceColumnIndex);
         String price = calculateFormattedPrice(currentPriceCents);

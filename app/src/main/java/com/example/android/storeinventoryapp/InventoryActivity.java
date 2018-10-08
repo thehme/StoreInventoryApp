@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
@@ -89,7 +88,6 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
             values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, "1-800-770-4662");
             values.put(InventoryEntry.COLUMN_BOOK_ISBN, "9780545328630");
 
-            Log.i(TAG, "values: " + values.toString());
             Uri uri = getContentResolver().insert(
                     InventoryEntry.CONTENT_URI,
                     values

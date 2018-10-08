@@ -26,8 +26,6 @@ import android.widget.Toast;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
 
 public class EditorActivity extends AppCompatActivity
@@ -270,11 +268,8 @@ public class EditorActivity extends AppCompatActivity
     private int convertPriceToCents(String dollarCents) {
         String[] splitPriceStrings = dollarCents.split("\\.");
         int priceInCents = 0;
-        Log.i(TAG, "price: " + Integer.toString(priceInCents));
         priceInCents += (Integer.parseInt(splitPriceStrings[0]) * 100);
-        Log.i(TAG, "price: " + Integer.toString(priceInCents));
         priceInCents += Integer.parseInt(splitPriceStrings[1]);
-        Log.i(TAG, "price: " + Integer.toString(priceInCents));
         return priceInCents;
     }
 
@@ -282,34 +277,28 @@ public class EditorActivity extends AppCompatActivity
         boolean inputsAreValid = true;
         String title = mBookTitleEditText.getText().toString().trim();
         if (TextUtils.isEmpty(title)) {
-            Log.i(TAG, "title required");
             inputsAreValid = false;
         }
         String priceString = mBookPriceDollarsCentsEditText.getText().toString().trim();
         if (TextUtils.isEmpty(priceString)) {
-            Log.i(TAG, "price required");
             inputsAreValid = false;
         } else {
             int price = convertPriceToCents(priceString);
             if (price <= 0) {
-                Log.i(TAG, "price must be greater or equal to 0");
                 inputsAreValid = false;
             }
         }
         String quantityString = mBookQuantityTextView.getText().toString().trim();
         if (TextUtils.isEmpty(quantityString)) {
-            Log.i(TAG, "quantity required");
             inputsAreValid = false;
         } else {
             int quantity = Integer.parseInt(quantityString);
             if (Double.isNaN(quantity) || quantity < 0) {
-                Log.i(TAG, "quantity must be greater or equal to 0");
                 inputsAreValid = false;
             }
         }
         String isbn = mBookISBNEditText.getText().toString().trim();
         if (TextUtils.isEmpty(isbn) || isbn.length() < 13) {
-            Log.i(TAG, "ISBN must be 13 characters long");
             inputsAreValid = false;
         }
         return inputsAreValid;
@@ -343,10 +332,8 @@ public class EditorActivity extends AppCompatActivity
                             values
                     );
                     if (uri == null) {
-                        Log.i(TAG, "Error inserting data");
                         Toast.makeText(this, R.string.editor_insert_failure, Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.i(TAG, "New data inserted");
                         Toast.makeText(this, R.string.editor_insert_success, Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -357,10 +344,8 @@ public class EditorActivity extends AppCompatActivity
                             null
                     );
                     if (numUpdated > 0) {
-                        Log.i(TAG, "Book updating book");
                         Toast.makeText(this, R.string.editor_update_success, Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.i(TAG, "Error updating book");
                         Toast.makeText(this, R.string.editor_update_failure, Toast.LENGTH_SHORT).show();
                     }
                 }

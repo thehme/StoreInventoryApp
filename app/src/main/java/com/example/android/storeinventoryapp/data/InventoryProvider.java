@@ -165,7 +165,6 @@ public class InventoryProvider extends ContentProvider {
                 selection,
                 selectionArgs
         );
-        Log.i(TAG, "deleted" + deletedNum + " books" );
         if (deletedNum > 0) {
             // notify all listeners that a change has occurred to uri
             // second parameter is optional observer, but passing null makes it so that
@@ -195,7 +194,6 @@ public class InventoryProvider extends ContentProvider {
     }
 
     private int updateBook(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        Log.i(TAG, "book uri being updated: " + uri.toString());
         SQLiteDatabase database = inventoryDbHelper.getWritableDatabase();
         int updatedNum = database.update(
                 InventoryEntry.TABLE_NAME,
@@ -204,7 +202,6 @@ public class InventoryProvider extends ContentProvider {
                 selectionArgs
         );
         if (updatedNum > 0) {
-            Log.i(TAG, "updated books: " + updatedNum);
             // notify all listeners that a change has occurred to uri
             // second parameter is optional observer, but passing null makes it so that
             // by default cursor adapter object is notified
