@@ -62,13 +62,16 @@ public class EditorActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         mCurrentBookUri = intent.getData();
+        final Button reOrderButton = (Button) findViewById(R.id.re_order_button);
 
         if (mCurrentBookUri != null) {
             setTitle(R.string.edit_book);
+            reOrderButton.setVisibility(View.VISIBLE);
             // initialize loader
             getLoaderManager().initLoader(URL_LOADER, null, this);
         } else {
             setTitle(R.string.add_book);
+            reOrderButton.setVisibility(View.GONE);
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a book that hasn't been created yet.)
             invalidateOptionsMenu();
@@ -114,7 +117,6 @@ public class EditorActivity extends AppCompatActivity
             }
         });
 
-        final Button reOrderButton = (Button) findViewById(R.id.re_order_button);
         reOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,7 +146,6 @@ public class EditorActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.action_save:
                 saveBook();
-                finish();
                 return true;
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
@@ -267,10 +268,14 @@ public class EditorActivity extends AppCompatActivity
 
     private int convertPriceToCents(String dollarCents) {
         String[] splitPriceStrings = dollarCents.split("\\.");
-        int priceInCents = 0;
-        priceInCents += (Integer.parseInt(splitPriceStrings[0]) * 100);
-        priceInCents += Integer.parseInt(splitPriceStrings[1]);
-        return priceInCents;
+        if (splitPriceStrings.length == 1 && splitPriceStrings[0].equals("0")) {
+            return 0;
+        } else {
+            int priceInCents = 0;
+            priceInCents += (Integer.parseInt(splitPriceStrings[0]) * 100);
+            priceInCents += Integer.parseInt(splitPriceStrings[1]);
+            return priceInCents;
+        }
     }
 
     private boolean validateInputValues() {
@@ -278,28 +283,35 @@ public class EditorActivity extends AppCompatActivity
         String title = mBookTitleEditText.getText().toString().trim();
         if (TextUtils.isEmpty(title)) {
             inputsAreValid = false;
+            Toast.makeText(this, R.string.editor_validate_title_error_message, Toast.LENGTH_SHORT).show();
         }
         String priceString = mBookPriceDollarsCentsEditText.getText().toString().trim();
         if (TextUtils.isEmpty(priceString)) {
             inputsAreValid = false;
+            Toast.makeText(this, R.string.editor_validate_price_missing_message, Toast.LENGTH_SHORT).show();
         } else {
             int price = convertPriceToCents(priceString);
             if (price <= 0) {
                 inputsAreValid = false;
+                Toast.makeText(this, R.string.editor_validate_price_negative_message, Toast.LENGTH_SHORT).show();
             }
         }
         String quantityString = mBookQuantityTextView.getText().toString().trim();
+        Log.i(TAG, quantityString);
         if (TextUtils.isEmpty(quantityString)) {
             inputsAreValid = false;
+            Toast.makeText(this, R.string.editor_validate_quantity_missing_message, Toast.LENGTH_SHORT).show();
         } else {
             int quantity = Integer.parseInt(quantityString);
             if (Double.isNaN(quantity) || quantity < 0) {
                 inputsAreValid = false;
+                Toast.makeText(this, R.string.editor_validate_quantity_invalid_message, Toast.LENGTH_SHORT).show();
             }
         }
         String isbn = mBookISBNEditText.getText().toString().trim();
         if (TextUtils.isEmpty(isbn) || isbn.length() < 13) {
             inputsAreValid = false;
+            Toast.makeText(this, R.string.editor_validate_isbn_invalid_message, Toast.LENGTH_SHORT).show();
         }
         return inputsAreValid;
     }
@@ -335,6 +347,7 @@ public class EditorActivity extends AppCompatActivity
                         Toast.makeText(this, R.string.editor_insert_failure, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, R.string.editor_insert_success, Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 } else {
                     int numUpdated = getContentResolver().update(
@@ -345,6 +358,7 @@ public class EditorActivity extends AppCompatActivity
                     );
                     if (numUpdated > 0) {
                         Toast.makeText(this, R.string.editor_update_success, Toast.LENGTH_SHORT).show();
+                        finish();
                     } else {
                         Toast.makeText(this, R.string.editor_update_failure, Toast.LENGTH_SHORT).show();
                     }

@@ -48,4 +48,11 @@
     <string name="editor_minus_button">-</string>
     <!-- Re-order button text -->
     <string name="editor_reorder_button">Re-order</string>
+    <!-- toast messages -->
+    <string name="editor_validate_title_error_message">Book title required.</string>
+    <string name="editor_validate_price_missing_message">Book price required.</string>
+    <string name="editor_validate_price_negative_message">Valid book price required.</string>
+    <string name="editor_validate_quantity_missing_message">Enter book quantity.</string>
+    <string name="editor_validate_quantity_invalid_message">Enter valid book quantity.</string>
+    <string name="editor_validate_isbn_invalid_message">Enter valid 13 digit ISBN.</string>
 </resources>
