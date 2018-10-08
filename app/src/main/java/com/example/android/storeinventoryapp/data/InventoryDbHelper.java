@@ -18,7 +18,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
             InventoryEntry.COLUMN_BOOK_QUANTITY + " INTEGER NOT NULL DEFAULT 0",
             InventoryEntry.COLUMN_BOOK_SUPPLIER + " TEXT",
             InventoryEntry.COLUMN_SUPPLIER_PHONE + " TEXT",
-            InventoryEntry.COLUMN_BOOK_ISBN + "TEXT NOT NULL"
+            InventoryEntry.COLUMN_BOOK_ISBN + " TEXT NOT NULL"
     );
 
     private final static String SQL_DELETE_ENTRIES =
