@@ -43,4 +43,7 @@
     <!-- Delete book success and failure messages -->
     <string name="editor_delete_book_successful">Successfully deleted book</string>
     <string name="editor_delete_book_failure">Failed to delete book</string>
+    <!-- Plus/Minus -->
+    <string name="editor_plus_button">+</string>
+    <string name="editor_minus_button">-</string>
 </resources>

@@ -55,7 +55,6 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Log.i(TAG, "in on click event");
                 Intent editActivity = new Intent(InventoryActivity.this, EditorActivity.class);
                 // create uri using ContentUris.withAppendId to find specific book object
                 // content://com.example.android.books/id

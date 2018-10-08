@@ -23,10 +23,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
+
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 
@@ -42,7 +46,8 @@ public class EditorActivity extends AppCompatActivity
     // fields to enter book data
     private EditText mBookTitleEditText;
     private EditText mBookPriceDollarsCentsEditText;
-    private EditText mBookQuantityEditText;
+    private TextView mBookQuantityTextView;
+    private int bookQuantity;
     private EditText mBookSupplierNameEditText;
     private EditText mBookSupplierPhoneNumberEditText;
     private EditText mBookISBNEditText;
@@ -77,17 +82,47 @@ public class EditorActivity extends AppCompatActivity
         // find all relevant views from which data will be read from
         mBookTitleEditText = (EditText) findViewById(R.id.edit_book_name);
         mBookPriceDollarsCentsEditText = (EditText) findViewById(R.id.edit_book_price);
-        mBookQuantityEditText = (EditText) findViewById(R.id.edit_book_quantity);
+        mBookQuantityTextView = (TextView) findViewById(R.id.edit_book_quantity);
         mBookSupplierNameEditText = (EditText) findViewById(R.id.edit_supplier_name);
         mBookSupplierPhoneNumberEditText = (EditText) findViewById(R.id.edit_supplier_phone_number);
         mBookISBNEditText = (EditText) findViewById(R.id.edit_book_isbn);
 
         mBookTitleEditText.setOnTouchListener(mTouchListener);
         mBookPriceDollarsCentsEditText.setOnTouchListener(mTouchListener);
-        mBookQuantityEditText.setOnTouchListener(mTouchListener);
+        mBookQuantityTextView.setOnTouchListener(mTouchListener);
         mBookSupplierNameEditText.setOnTouchListener(mTouchListener);
         mBookSupplierPhoneNumberEditText.setOnTouchListener(mTouchListener);
         mBookISBNEditText.setOnTouchListener(mTouchListener);
+
+        final Button decreaseButton = (Button) findViewById(R.id.minus_button);
+        decreaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (bookQuantity >= 1) {
+                    if (!decreaseButton.isEnabled()) {
+                        decreaseButton.setEnabled(true);
+                    }
+                    bookQuantity = bookQuantity - 1;
+                    displayQuantity(bookQuantity);
+                } else {
+                    decreaseButton.setEnabled(false);
+                }
+            }
+        });
+
+        final Button increaseButton = (Button) findViewById(R.id.plus_button);
+        increaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bookQuantity = bookQuantity + 1;
+                displayQuantity(bookQuantity);
+            }
+        });
+    }
+
+    private void displayQuantity(int numberQuantity) {
+        TextView quantityTextView = (TextView) findViewById(R.id.edit_book_quantity);
+        quantityTextView.setText("" + numberQuantity);
     }
 
     @Override
@@ -254,7 +289,7 @@ public class EditorActivity extends AppCompatActivity
                 inputsAreValid = false;
             }
         }
-        String quantityString = mBookQuantityEditText.getText().toString().trim();
+        String quantityString = mBookQuantityTextView.getText().toString().trim();
         if (TextUtils.isEmpty(quantityString)) {
             Log.i(TAG, "quantity required");
             inputsAreValid = false;
@@ -280,7 +315,7 @@ public class EditorActivity extends AppCompatActivity
                 String titleString = mBookTitleEditText.getText().toString().trim();
                 String priceInDollarsCents = mBookPriceDollarsCentsEditText.getText().toString().trim();
                 int priceInCents = convertPriceToCents(priceInDollarsCents);
-                String bookQuantity = mBookQuantityEditText.getText().toString().trim();
+                String bookQuantity = mBookQuantityTextView.getText().toString().trim();
                 String bookSupplierName = mBookSupplierNameEditText.getText().toString().trim();
                 String bookSupplierPhoneNumber = mBookSupplierPhoneNumberEditText.getText().toString().trim();
                 String bookISBN = mBookISBNEditText.getText().toString().trim();
@@ -381,7 +416,8 @@ public class EditorActivity extends AppCompatActivity
 
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_QUANTITY));
             String quantityString = Integer.toString(quantity);
-            mBookQuantityEditText.setText(quantityString);
+            mBookQuantityTextView.setText(quantityString);
+            bookQuantity = Integer.parseInt(quantityString);
 
             String supplierName = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_SUPPLIER));
             mBookSupplierNameEditText.setText(supplierName);
@@ -398,7 +434,7 @@ public class EditorActivity extends AppCompatActivity
     public void onLoaderReset(Loader<Cursor> loader) {
         mBookTitleEditText.setText("");
         mBookPriceDollarsCentsEditText.setText("");
-        mBookQuantityEditText.setText("");
+        mBookQuantityTextView.setText("");
         mBookSupplierNameEditText.setText("");
         mBookSupplierPhoneNumberEditText.setText("");
         mBookISBNEditText.setText("");
