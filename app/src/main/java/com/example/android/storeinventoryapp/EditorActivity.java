@@ -1,21 +1,20 @@
 package com.example.android.storeinventoryapp;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-//import android.support.v4.app.LoaderManager;
 import android.app.LoaderManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
-//import android.support.v4.content.CursorLoader;
 import android.content.CursorLoader;
-//import android.support.v4.content.Loader;
-//import android.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,8 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.storeinventoryapp.data.InventoryContract.InventoryEntry;
-
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 
@@ -50,6 +47,7 @@ public class EditorActivity extends AppCompatActivity
     private int bookQuantity;
     private EditText mBookSupplierNameEditText;
     private EditText mBookSupplierPhoneNumberEditText;
+    private String phoneNumber;
     private EditText mBookISBNEditText;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
@@ -116,6 +114,16 @@ public class EditorActivity extends AppCompatActivity
             public void onClick(View view) {
                 bookQuantity = bookQuantity + 1;
                 displayQuantity(bookQuantity);
+            }
+        });
+
+        final Button reOrderButton = (Button) findViewById(R.id.re_order_button);
+        reOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + phoneNumber));
+                startActivity(intent);
             }
         });
     }
@@ -423,6 +431,7 @@ public class EditorActivity extends AppCompatActivity
             mBookSupplierNameEditText.setText(supplierName);
 
             String supplierPhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_SUPPLIER_PHONE));
+            phoneNumber = supplierPhoneNumber;
             mBookSupplierPhoneNumberEditText.setText(supplierPhoneNumber);
 
             String isbn = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_BOOK_ISBN));
