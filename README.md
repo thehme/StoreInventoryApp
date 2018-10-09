@@ -13,7 +13,9 @@ This app allows a book store to keep track of its inventory of products. In the 
 - An intent is used to make a phone call to re-order a book, when in the editing Editor's Activity.
 
  # Views
- 
+
+ ![empty_screen](app/src/main/res/drawable/empty_screen.png)
+
  ![main_screen](app/src/main/res/drawable/main_screen.png)
 
  ![edit_book_screen](app/src/main/res/drawable/edit_book_screen.png)
