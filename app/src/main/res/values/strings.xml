@@ -54,5 +54,10 @@
     <string name="editor_validate_price_negative_message">Valid book price required.</string>
     <string name="editor_validate_quantity_missing_message">Enter book quantity.</string>
     <string name="editor_validate_quantity_invalid_message">Enter valid book quantity.</string>
+    <string name="editor_validate_supplier_name_invalid_message">Enter valid supplier name.</string>
+    <string name="editor_validate_supplier_phone_invalid_message">Supplier phone number invalid.</string>
     <string name="editor_validate_isbn_invalid_message">Enter valid 13 digit ISBN.</string>
+    <!-- Empty view -->
+    <string name="empty_view_title">No Books In Inventory</string>
+    <string name="empty_view_subtitle">Try adding a book...</string>
 </resources>

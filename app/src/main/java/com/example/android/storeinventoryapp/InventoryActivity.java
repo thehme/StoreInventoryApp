@@ -47,6 +47,10 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         // find reference to list view
         ListView listView = (ListView) findViewById(R.id.books_list);
 
+        // find empty view
+        View emptyView = findViewById(R.id.empty_view);
+        listView.setEmptyView(emptyView);
+
         inventoryCursorAdaptor = new InventoryCursorAdaptor(this, null);
         listView.setAdapter(inventoryCursorAdaptor);
 

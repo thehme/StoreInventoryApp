@@ -16,8 +16,8 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
             InventoryEntry.COLUMN_BOOK_NAME + " TEXT NOT NULL",
             InventoryEntry.COLUMN_BOOK_PRICE_CENTS + " INTEGER NOT NULL",
             InventoryEntry.COLUMN_BOOK_QUANTITY + " INTEGER NOT NULL DEFAULT 0",
-            InventoryEntry.COLUMN_BOOK_SUPPLIER + " TEXT",
-            InventoryEntry.COLUMN_SUPPLIER_PHONE + " TEXT",
+            InventoryEntry.COLUMN_BOOK_SUPPLIER + " TEXT NOT NULL",
+            InventoryEntry.COLUMN_SUPPLIER_PHONE + " TEXT NOT NULL",
             InventoryEntry.COLUMN_BOOK_ISBN + " TEXT NOT NULL"
     );
 

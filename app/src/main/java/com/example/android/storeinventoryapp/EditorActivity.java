@@ -281,37 +281,51 @@ public class EditorActivity extends AppCompatActivity
     private boolean validateInputValues() {
         boolean inputsAreValid = true;
         String title = mBookTitleEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(title)) {
-            inputsAreValid = false;
+        if (inputsAreValid && TextUtils.isEmpty(title)) {
             Toast.makeText(this, R.string.editor_validate_title_error_message, Toast.LENGTH_SHORT).show();
+            return false;
         }
+
         String priceString = mBookPriceDollarsCentsEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(priceString)) {
-            inputsAreValid = false;
+        if (inputsAreValid && TextUtils.isEmpty(priceString)) {
             Toast.makeText(this, R.string.editor_validate_price_missing_message, Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             int price = convertPriceToCents(priceString);
-            if (price <= 0) {
-                inputsAreValid = false;
+            if (inputsAreValid && price <= 0) {
                 Toast.makeText(this, R.string.editor_validate_price_negative_message, Toast.LENGTH_SHORT).show();
+                return false;
             }
         }
+
         String quantityString = mBookQuantityTextView.getText().toString().trim();
-        Log.i(TAG, quantityString);
-        if (TextUtils.isEmpty(quantityString)) {
-            inputsAreValid = false;
+        if (inputsAreValid && TextUtils.isEmpty(quantityString)) {
             Toast.makeText(this, R.string.editor_validate_quantity_missing_message, Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             int quantity = Integer.parseInt(quantityString);
-            if (Double.isNaN(quantity) || quantity < 0) {
-                inputsAreValid = false;
+            if (inputsAreValid && Double.isNaN(quantity) || quantity < 0) {
                 Toast.makeText(this, R.string.editor_validate_quantity_invalid_message, Toast.LENGTH_SHORT).show();
+                return false;
             }
         }
+
         String isbn = mBookISBNEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(isbn) || isbn.length() < 13) {
-            inputsAreValid = false;
+        if (inputsAreValid && TextUtils.isEmpty(isbn) || isbn.length() < 13) {
             Toast.makeText(this, R.string.editor_validate_isbn_invalid_message, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        String bookSupplier = mBookSupplierNameEditText.getText().toString().trim();
+        if (inputsAreValid && TextUtils.isEmpty(bookSupplier)) {
+            Toast.makeText(this, R.string.editor_validate_supplier_name_invalid_message, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        String bookSupplierPhoneNumber = mBookSupplierPhoneNumberEditText.getText().toString().trim();
+        if (inputsAreValid && TextUtils.isEmpty(bookSupplierPhoneNumber)) {
+            Toast.makeText(this, R.string.editor_validate_supplier_phone_invalid_message, Toast.LENGTH_SHORT).show();
+            return false;
         }
         return inputsAreValid;
     }
