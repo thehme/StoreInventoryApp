@@ -100,7 +100,7 @@ public class EditorActivity extends AppCompatActivity
                     if (!decreaseButton.isEnabled()) {
                         decreaseButton.setEnabled(true);
                     }
-                    bookQuantity = bookQuantity - 1;
+                    bookQuantity--;
                     displayQuantity(bookQuantity);
                 } else {
                     decreaseButton.setEnabled(false);
@@ -122,7 +122,9 @@ public class EditorActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + phoneNumber));
-                startActivity(intent);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -272,8 +274,12 @@ public class EditorActivity extends AppCompatActivity
             return 0;
         } else {
             int priceInCents = 0;
-            priceInCents += (Integer.parseInt(splitPriceStrings[0]) * 100);
-            priceInCents += Integer.parseInt(splitPriceStrings[1]);
+            if (splitPriceStrings.length == 1) {
+                priceInCents += (Integer.parseInt(splitPriceStrings[0]) * 100);
+            } else {
+                priceInCents += (Integer.parseInt(splitPriceStrings[0]) * 100);
+                priceInCents += Integer.parseInt(splitPriceStrings[1]);
+            }
             return priceInCents;
         }
     }
